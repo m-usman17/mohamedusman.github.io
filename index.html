@@ -9,7 +9,7 @@
     body {
       margin: 0;
       padding: 0;
-      background: #000000;
+      background: #000;
       color: #fff;
       font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
       position: relative;
@@ -17,28 +17,45 @@
       overflow-x: hidden;
     }
     header {
+      position: relative;
       background: transparent;
       color: #fff;
       text-align: center;
-      padding: 56px 20px 20px 20px;
+      padding: 64px 20px 40px 20px;
+      z-index: 2;
+    }
+    .signal-svg {
+      position: absolute;
+      left: 0;
+      top: 22px;
+      width: 100vw;
+      height: 90px;
+      pointer-events: none;
+      z-index: 1;
     }
     header h1 {
+      position: relative;
       font-size: 3rem;
-      margin-bottom: 12px;
       letter-spacing: 2px;
       font-weight: bold;
+      margin-bottom: 20px;
       text-shadow: 0 0 32px #fff, 0 0 12px #fff;
+      z-index: 2;
     }
     header p {
       font-size: 1.25rem;
       color: #fff;
       opacity: 0.85;
       text-shadow: 0 0 18px #fff;
+      margin-top: 8px;
+      z-index: 2;
+      position: relative;
     }
     nav {
       background: transparent;
       padding: 13px 0;
       text-align: center;
+      z-index: 2;
     }
     nav a {
       color: #fff;
@@ -57,21 +74,60 @@
       padding: 2px 8px;
       text-shadow: none;
     }
-    #three-bg {
-      position: fixed;
-      z-index: 0;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: auto;
+    /* 3D container styling */
+    .three-section {
+      max-width: 900px;
+      margin: 0 auto;
+      margin-bottom: 32px;
+      margin-top: 0;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #three-container {
+      width: 100%;
+      max-width: 740px;
+      height: 340px;
+      min-height: 200px;
+      border-radius: 24px;
+      box-shadow: 0 0 44px #fff, 0 2px 18px #000;
+      background: #111;
+      overflow: hidden;
+      transition: height 0.4s, max-width 0.4s;
+      margin-bottom: 8px;
+      margin-top: 0;
+    }
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      justify-content: center;
+    }
+    .control-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.08rem;
+      font-weight: bold;
+      padding: 8px 18px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #fff;
+      transition: background 0.2s, color 0.2s;
+    }
+    .control-btn:hover {
+      background: #000;
+      color: #fff;
+      border: 1px solid #fff;
     }
     .content {
       position: relative;
       z-index: 1;
       max-width: 800px;
       margin: 0 auto;
-      padding: 50px 20px 20px 20px;
+      padding: 20px 20px 20px 20px;
     }
     h2 {
       color: #fff;
@@ -149,7 +205,17 @@
   </style>
 </head>
 <body>
-  <canvas id="three-bg"></canvas>
+  <!-- Signals SVG waves -->
+  <div class="signal-svg">
+    <svg width="100vw" height="90" viewBox="0 0 1200 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100vw; height:90px;">
+      <!-- Sine wave (animated) -->
+      <path id="sine" stroke="#fff" stroke-width="2.5" fill="none"/>
+      <!-- Sawtooth wave -->
+      <polyline points="20,45 70,10 120,80 170,10 220,80 270,10 320,80 370,10 420,80 470,10 520,80 570,10 620,80" stroke="#fff" stroke-width="2.2" fill="none" opacity="0.28"/>
+      <!-- Square wave -->
+      <polyline points="650,45 650,10 700,10 700,80 750,80 750,10 800,10 800,80 850,80" stroke="#fff" stroke-width="2" fill="none" opacity="0.2"/>
+    </svg>
+  </div>
   <header>
     <h1>Mohamed Usman</h1>
     <p>Electronics & IoT Enthusiast | Embedded Systems Learner</p>
@@ -159,6 +225,16 @@
     <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
   </nav>
+  <!-- 3D Section -->
+  <section class="three-section">
+    <div class="controls">
+      <button class="control-btn" onclick="resizeThree('shrink')">Shrink 3D Area</button>
+      <button class="control-btn" onclick="resizeThree('expand')">Expand 3D Area</button>
+    </div>
+    <div id="three-container">
+      <canvas id="three-bg"></canvas>
+    </div>
+  </section>
   <div class="content">
     <section id="projects">
       <h2>Projects</h2>
@@ -192,50 +268,101 @@
     <p>© 2025 Mohamed Usman. All rights reserved.</p>
   </footer>
   <script>
-    // Three.js scene setup
+    // ---- SVG Sine Wave Animation ----
+    function animateSine() {
+      const sine = document.getElementById("sine");
+      let points = "";
+      for (let x = 0; x <= 600; x += 12) {
+        let y = 45 + Math.sin((x + (Date.now()/7) % 600)*0.024) * 30;
+        points += (x+20) + "," + Math.round(y) + " ";
+      }
+      let d = "M " + points.split(" ").join(" L ");
+      sine.setAttribute("d", d);
+      requestAnimationFrame(animateSine);
+    }
+    animateSine();
+
+    // ---- 3D Electronics Section ----
+    let threeWidth = 740, threeHeight = 340;
+    function resizeThree(action) {
+      if (action === 'shrink') {
+        threeWidth = 420; threeHeight = 180;
+      } else {
+        threeWidth = 740; threeHeight = 340;
+      }
+      document.getElementById('three-container').style.maxWidth = threeWidth + "px";
+      document.getElementById('three-container').style.height = threeHeight + "px";
+      renderer.setSize(threeWidth, threeHeight);
+      camera.aspect = threeWidth/threeHeight;
+      camera.updateProjectionMatrix();
+    }
+    // Initial size
+    document.getElementById('three-container').style.maxWidth = threeWidth + "px";
+    document.getElementById('three-container').style.height = threeHeight + "px";
+
+    // Three.js setup
     const canvas = document.getElementById('three-bg');
     const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(threeWidth, threeHeight);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.z = 80;
+    const camera = new THREE.PerspectiveCamera(60, threeWidth/threeHeight, 0.1, 1000);
+    camera.position.z = 70;
 
-    // Soft white ambient light
-    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-    const pointLight = new THREE.PointLight(0xffffff, 1, 300);
+    // Lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.96));
+    const pointLight = new THREE.PointLight(0xffffff, 1.2, 300);
     pointLight.position.set(0, 80, 100);
     scene.add(pointLight);
 
-    // Helper function for glowy material
-    function makeWhiteMaterial(opacity = 0.65) {
+    // Helper material
+    function makeWhiteMaterial(opacity = 0.7) {
       return new THREE.MeshPhongMaterial({
-        color: 0xffffff, 
-        transparent: true, 
+        color: 0xffffff,
+        transparent: true,
         opacity: opacity,
         shininess: 120,
         emissive: 0xffffff,
-        emissiveIntensity: 0.2
+        emissiveIntensity: 0.3
+      });
+    }
+    function makeBandMaterial(color, opacity) {
+      return new THREE.MeshPhongMaterial({
+        color: color,
+        transparent: true,
+        opacity: opacity,
+        shininess: 50,
+        emissive: color,
+        emissiveIntensity: 0.1
       });
     }
 
-    // Realistic, curvy components
-    function createResistor(x, y, z) {
-      // Body (rounded edges)
-      const bodyGeom = new THREE.CylinderGeometry(2.2, 2.2, 14, 32);
+    // Detailed resistor (with bands)
+    function createResistor(x, y, z, bands=[0xD32F2F,0xFFD600,0x1976D2,0x222]) {
+      // Body
+      const bodyGeom = new THREE.CylinderGeometry(2.4, 2.4, 14, 32);
       const bodyMat = makeWhiteMaterial(0.7);
       const body = new THREE.Mesh(bodyGeom, bodyMat);
       body.position.set(x, y, z);
 
-      // Rounded domes (caps) on ends
-      const domeGeom = new THREE.SphereGeometry(2.2, 16, 16, 0, Math.PI * 2, 0, Math.PI/2);
+      // Rounded domes (caps)
+      const domeGeom = new THREE.SphereGeometry(2.4, 20, 20, 0, Math.PI * 2, 0, Math.PI/2);
       const dome1 = new THREE.Mesh(domeGeom, bodyMat);
       dome1.position.set(x, y-7, z);
       dome1.rotation.x = Math.PI;
       scene.add(dome1);
       const dome2 = new THREE.Mesh(domeGeom, bodyMat);
       dome2.position.set(x, y+7, z);
+      scene.add(dome2);
 
+      // Bands (varying opacity for realism)
+      for (let i = 0; i < bands.length; i++) {
+        const bandGeom = new THREE.CylinderGeometry(2.5,2.5,1.3,32);
+        const bandMat = makeBandMaterial(bands[i], 0.36 + 0.18 * Math.random());
+        const band = new THREE.Mesh(bandGeom, bandMat);
+        band.position.set(x, y-4.5+i*3.2, z+0.01);
+        scene.add(band);
+      }
       // Leads
       const leadGeom = new THREE.CylinderGeometry(0.45,0.45,10,18);
       const leadMat = makeWhiteMaterial(0.45);
@@ -247,17 +374,14 @@
       scene.add(lead2);
 
       scene.add(body);
-      scene.add(dome2);
       return body;
     }
 
     function createCapacitor(x, y, z) {
-      // Body (rounded cylinder)
       const bodyGeom = new THREE.CylinderGeometry(3, 3, 12, 36);
       const bodyMat = makeWhiteMaterial(0.67);
       const body = new THREE.Mesh(bodyGeom, bodyMat);
       body.position.set(x, y, z);
-
       // Domes
       const domeGeom = new THREE.SphereGeometry(3, 18, 18, 0, Math.PI * 2, 0, Math.PI/2);
       const dome1 = new THREE.Mesh(domeGeom, bodyMat);
@@ -267,7 +391,6 @@
       const dome2 = new THREE.Mesh(domeGeom, bodyMat);
       dome2.position.set(x, y+6, z);
       scene.add(dome2);
-
       // Leads
       const leadGeom = new THREE.CylinderGeometry(0.33,0.33,11,16);
       const leadMat = makeWhiteMaterial(0.35);
@@ -277,19 +400,16 @@
       const lead2 = new THREE.Mesh(leadGeom, leadMat);
       lead2.position.set(x, y+13, z);
       scene.add(lead2);
-
       scene.add(body);
       return body;
     }
 
     function createInductor(x, y, z) {
-      // Donut torus
       const torusGeom = new THREE.TorusGeometry(4, 1.1, 24, 100);
       const torusMat = makeWhiteMaterial(0.6);
       const torus = new THREE.Mesh(torusGeom, torusMat);
       torus.position.set(x, y, z);
       torus.rotation.x = Math.PI/2;
-
       // Leads
       const leadGeom = new THREE.CylinderGeometry(0.32,0.32,9,16);
       const leadMat = makeWhiteMaterial(0.38);
@@ -299,24 +419,20 @@
       const lead2 = new THREE.Mesh(leadGeom, leadMat);
       lead2.position.set(x+7.5, y, z);
       scene.add(lead2);
-
       scene.add(torus);
       return torus;
     }
 
     function createTransistor(x, y, z) {
-      // Body (rounded cylinder)
       const bodyGeom = new THREE.CylinderGeometry(2.6, 2.6, 7, 32);
       const bodyMat = makeWhiteMaterial(0.75);
       const body = new THREE.Mesh(bodyGeom, bodyMat);
       body.position.set(x, y, z);
-
       // Dome top
       const domeGeom = new THREE.SphereGeometry(2.6, 16, 16, 0, Math.PI * 2, 0, Math.PI/2);
       const dome = new THREE.Mesh(domeGeom, bodyMat);
       dome.position.set(x, y+3.5, z);
       scene.add(dome);
-
       // Leads
       const leadGeom = new THREE.CylinderGeometry(0.28,0.28,8.5,14);
       const leadMat = makeWhiteMaterial(0.35);
@@ -329,30 +445,29 @@
       return body;
     }
 
-    // Scatter components with enough space to not overlap
-    const SCATTER_RADIUS = 38;
+    // Place components spaced out
     const objects = [
-      createResistor(-SCATTER_RADIUS, 20, 0),
-      createCapacitor(SCATTER_RADIUS, -18, 10),
-      createInductor(0, -SCATTER_RADIUS, -6),
-      createTransistor(SCATTER_RADIUS, SCATTER_RADIUS, 0),
-      createResistor(-SCATTER_RADIUS, -SCATTER_RADIUS, 18),
-      createInductor(-SCATTER_RADIUS, SCATTER_RADIUS, -12),
-      createCapacitor(0, SCATTER_RADIUS, 0),
-      createTransistor(-SCATTER_RADIUS, 0, SCATTER_RADIUS),
+      createResistor(-28, 17, 0, [0xD32F2F,0xFFD600,0x1976D2,0x222]),
+      createResistor(28, -17, 0, [0x388E3C,0x1976D2,0xFBC02D,0xfff]),
+      createCapacitor(-14, -28, 10),
+      createInductor(0, 28, -6),
+      createTransistor(28, 28, 0),
+      createInductor(-28, -28, 12),
+      createCapacitor(0, 0, 0),
+      createTransistor(-28, 0, 28),
     ];
 
     // Drag to rotate scene
     let isDragging = false, prevX = 0, prevY = 0;
-    canvas.addEventListener('mousedown', e => {isDragging=true; prevX=e.clientX; prevY=e.clientY;});
+    canvas.addEventListener('mousedown', e => {isDragging=true; prevX=e.offsetX; prevY=e.offsetY;});
     canvas.addEventListener('mouseup', e => {isDragging=false;});
     canvas.addEventListener('mouseleave', e => {isDragging=false;});
     canvas.addEventListener('mousemove', e => {
       if (isDragging) {
-        const dx = e.clientX - prevX, dy = e.clientY - prevY;
+        const dx = e.offsetX - prevX, dy = e.offsetY - prevY;
         scene.rotation.y += dx * 0.012;
         scene.rotation.x += dy * 0.012;
-        prevX = e.clientX; prevY = e.clientY;
+        prevX = e.offsetX; prevY = e.offsetY;
       }
     });
     canvas.addEventListener('touchstart', e => {
@@ -369,17 +484,17 @@
       }
     });
 
-    // Animation loop
+    // Animate
     function animate() {
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
     animate();
 
-    // Resize
+    // Responsive resize for 3D area
     window.addEventListener('resize', () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth/window.innerHeight;
+      renderer.setSize(threeWidth, threeHeight);
+      camera.aspect = threeWidth/threeHeight;
       camera.updateProjectionMatrix();
     });
   </script>
