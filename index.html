@@ -4,67 +4,278 @@
   <meta charset="UTF-8">
   <title>Mohamed Usman Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Three.js CDN for 3D elements -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
   <style>
-    body { font-family: Arial,sans-serif; background:#f5f5f5; margin:0; padding:0;}
-    header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; text-align: center; padding: 40px 20px;}
-    h1 { margin:0; font-size:2.2rem;}
-    nav { text-align:center; padding:10px; background:#222;}
-    nav a { color:white; margin:0 15px; text-decoration:none; font-weight:bold;}
-    .projects { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 40px; max-width:900px; margin:auto;}
-    .card { background:white; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.08); padding:40px 15px; text-align:center; cursor:pointer; transition: box-shadow 0.2s;}
-    .card:hover { box-shadow:0 8px 18px rgba(44,83,100,0.12);}
-    .card-title { font-size:1.3rem; color:#203a43; margin-bottom:0;}
-    footer { background: #222; color: white; text-align: center; padding: 15px; margin-top: 30px;}
+    body {
+      margin: 0;
+      padding: 0;
+      background: #181C27;
+      color: #B0B8C1;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    header {
+      background: linear-gradient(90deg, #121212 80%, #00FFF7 100%);
+      color: #00FFF7;
+      text-align: center;
+      padding: 48px 20px 24px 20px;
+      box-shadow: 0 8px 32px #00fff71a;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      text-shadow: 0 0 16px #00FFF7;
+    }
+    header p {
+      font-size: 1.3rem;
+      color: #00FF85;
+      text-shadow: 0 0 6px #00FF85;
+    }
+    nav {
+      background: #121212;
+      padding: 12px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px #00FFF766;
+    }
+    nav a {
+      color: #9D6FFF;
+      margin: 0 18px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.15rem;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: #00FFF7;
+      text-shadow: 0 0 8px #00FFF7;
+    }
+    #three-bg {
+      position: fixed;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: auto;
+      /* Allows pointer events for interaction */
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px 20px 20px;
+    }
+    h2 {
+      color: #00FFF7;
+      text-shadow: 0 0 8px #00FFF7;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .project-card {
+      background: #20233Aee;
+      border-radius: 14px;
+      margin-bottom: 36px;
+      padding: 28px 24px;
+      box-shadow: 0 0 32px #00FFF733, 0 2px 10px #121212;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid #00FFF7;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 48px #00FFF7bb, 0 4px 24px #121212;
+      border-color: #00FF85;
+    }
+    .project-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px #00FFF7;
+    }
+    .skills-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px 0;
+      color: #9D6FFF;
+      font-size: 1.07rem;
+    }
+    .skills-list li {
+      margin-bottom: 6px;
+    }
+    .contact {
+      margin-top: 38px;
+      color: #00FF85;
+      font-size: 1.15rem;
+      text-align: left;
+    }
+    .contact a {
+      color: #00FFF7;
+      text-decoration: underline;
+      margin: 0 14px;
+    }
+    footer {
+      background: #121212;
+      color: #9D6FFF;
+      text-align: center;
+      padding: 18px;
+      margin-top: 50px;
+      box-shadow: 0 -2px 8px #00FFF766;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
+  <!-- Three.js Canvas for 3D Electronics -->
+  <canvas id="three-bg"></canvas>
   <header>
     <h1>Mohamed Usman</h1>
-    <p>Electronics & IoT | Embedded Systems Learner</p>
+    <p>Electronics & IoT Enthusiast | Embedded Systems Learner</p>
   </header>
   <nav>
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
   </nav>
-
-  <!-- Project Headings -->
-  <section id="projects">
-    <h2 style="text-align:center; color:#2c5364;">Projects</h2>
-    <div class="projects">
-      <a href="facial-recognition.html" class="card">
-        <div class="card-title">Facial Recognition Attendance System with Liveness Detection</div>
-      </a>
-      <a href="dtmf-telerover.html" class="card">
-        <div class="card-title">DTMF Based Mobile Controlled Telerover</div>
-      </a>
-      <a href="iot-vehicle-alert.html" class="card">
-        <div class="card-title">IoT Based Automatic Vehicle Accident and Rash Driving Alert System</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Skills -->
-  <section id="skills" style="max-width:700px; margin:auto; padding:40px 20px;">
-    <h2 style="text-align:center; color:#2c5364;">Skills</h2>
-    <ul style="font-size:1.1rem;">
-      <li><strong>Technical Skills:</strong> Embedded System Development, IoT System Design and Implementation</li>
-      <li><strong>Programming Languages:</strong> C/Arduino, Python/Micro Python</li>
-    </ul>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" style="max-width:700px; margin:auto; padding:40px 20px;">
-    <h2 style="text-align:center; color:#2c5364;">Contact</h2>
-    <p>📧 Email: <a href="mailto:mdusman102004@gmail.com">mdusman102004@gmail.com</a></p>
-    <p>
-      <a href="https://github.com/m-usman17" target="_blank">GitHub</a> | 
-      <a href="https://linkedin.com/in/mohamed-usman-a" target="_blank">LinkedIn</a>
-    </p>
-  </section>
-
+  <div class="content">
+    <!-- Projects One Below the Other -->
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="project-card" onclick="location.href='facial-recognition.html'">
+        <div class="project-title">Facial Recognition Attendance System with Liveness Detection</div>
+      </div>
+      <div class="project-card" onclick="location.href='dtmf-telerover.html'">
+        <div class="project-title">DTMF Based Mobile Controlled Telerover</div>
+      </div>
+      <div class="project-card" onclick="location.href='iot-vehicle-alert.html'">
+        <div class="project-title">IoT Based Automatic Vehicle Accident and Rash Driving Alert System</div>
+      </div>
+    </section>
+    <!-- Skills -->
+    <section id="skills">
+      <h2>Skills</h2>
+      <ul class="skills-list">
+        <li><strong>Technical Skills:</strong> Embedded System Development, IoT System Design and Implementation</li>
+        <li><strong>Programming Languages:</strong> C/Arduino, Python/Micro Python</li>
+      </ul>
+    </section>
+    <!-- Contact -->
+    <section id="contact" class="contact">
+      <h2>Contact</h2>
+      <p>📧 Email: <a href="mailto:mdusman102004@gmail.com">mdusman102004@gmail.com</a></p>
+      <p>
+        <a href="https://github.com/m-usman17" target="_blank">GitHub</a>
+        <a href="https://linkedin.com/in/mohamed-usman-a" target="_blank">LinkedIn</a>
+      </p>
+    </section>
+  </div>
   <footer>
     <p>© 2025 Mohamed Usman. All rights reserved.</p>
   </footer>
+  <!-- Basic Three.js Electronics Example -->
+  <script>
+    // Setup scene
+    const canvas = document.getElementById('three-bg');
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 50;
+
+    // Ambient and point light for glow
+    scene.add(new THREE.AmbientLight(0x00fff7, 0.6));
+    const pointLight = new THREE.PointLight(0x9d6fff, 1, 200);
+    pointLight.position.set(0, 50, 50);
+    scene.add(pointLight);
+
+    // Add some 3D "components" (cylinder for resistor, box for IC, sphere for capacitor)
+    function createResistor(x, y, z) {
+      const geometry = new THREE.CylinderGeometry(2, 2, 10, 32);
+      const material = new THREE.MeshPhongMaterial({color: 0x00ff85});
+      const resistor = new THREE.Mesh(geometry, material);
+      resistor.position.set(x, y, z);
+      scene.add(resistor);
+      return resistor;
+    }
+
+    function createCapacitor(x, y, z) {
+      const geometry = new THREE.SphereGeometry(3, 32, 32);
+      const material = new THREE.MeshPhongMaterial({color: 0x9d6fff});
+      const capacitor = new THREE.Mesh(geometry, material);
+      capacitor.position.set(x, y, z);
+      scene.add(capacitor);
+      return capacitor;
+    }
+
+    function createIC(x, y, z) {
+      const geometry = new THREE.BoxGeometry(8, 3, 8);
+      const material = new THREE.MeshPhongMaterial({color: 0x00fff7});
+      const ic = new THREE.Mesh(geometry, material);
+      ic.position.set(x, y, z);
+      scene.add(ic);
+      return ic;
+    }
+
+    // Scatter some components
+    const objects = [
+      createResistor(-30, 12, 0),
+      createCapacitor(40, -8, 0),
+      createIC(-10, -25, 0),
+      createResistor(25, 25, 0),
+      createCapacitor(-40, -18, 0),
+      createIC(15, 22, 0),
+    ];
+
+    // Simple interaction: drag to rotate scene
+    let isDragging = false, prevX = 0, prevY = 0;
+    canvas.addEventListener('mousedown', e => {isDragging=true; prevX=e.clientX; prevY=e.clientY;});
+    canvas.addEventListener('mouseup', e => {isDragging=false;});
+    canvas.addEventListener('mouseleave', e => {isDragging=false;});
+    canvas.addEventListener('mousemove', e => {
+      if (isDragging) {
+        const dx = e.clientX - prevX, dy = e.clientY - prevY;
+        scene.rotation.y += dx * 0.01;
+        scene.rotation.x += dy * 0.01;
+        prevX = e.clientX; prevY = e.clientY;
+      }
+    });
+    canvas.addEventListener('touchstart', e => {
+      isDragging=true;
+      prevX=e.touches[0].clientX; prevY=e.touches[0].clientY;
+    });
+    canvas.addEventListener('touchend', e => {isDragging=false;});
+    canvas.addEventListener('touchmove', e => {
+      if (isDragging) {
+        const dx = e.touches[0].clientX - prevX, dy = e.touches[0].clientY - prevY;
+        scene.rotation.y += dx * 0.01;
+        scene.rotation.x += dy * 0.01;
+        prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+      }
+    });
+
+    // Animate
+    function animate() {
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Resize on window change
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth/window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+  </script>
 </body>
 </html>
