@@ -23,11 +23,12 @@
       text-align: center;
       padding: 64px 20px 40px 20px;
       z-index: 2;
+      overflow: visible;
     }
-    .signal-svg {
+    .sine-svg {
       position: absolute;
       left: 0;
-      top: 22px;
+      top: 0;
       width: 100vw;
       height: 90px;
       pointer-events: none;
@@ -74,11 +75,9 @@
       padding: 2px 8px;
       text-shadow: none;
     }
-    /* 3D container styling */
     .three-section {
       max-width: 900px;
-      margin: 0 auto;
-      margin-bottom: 32px;
+      margin: 0 auto 32px auto;
       margin-top: 0;
       position: relative;
       z-index: 1;
@@ -95,32 +94,20 @@
       box-shadow: 0 0 44px #fff, 0 2px 18px #000;
       background: #111;
       overflow: hidden;
-      transition: height 0.4s, max-width 0.4s;
       margin-bottom: 8px;
       margin-top: 0;
+      position: relative;
     }
-    .controls {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 12px;
-      justify-content: center;
-    }
-    .control-btn {
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.08rem;
-      font-weight: bold;
-      padding: 8px 18px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #fff;
-      transition: background 0.2s, color 0.2s;
-    }
-    .control-btn:hover {
-      background: #000;
+    .zoom-indicator {
+      position: absolute;
+      top: 10px; right: 18px;
       color: #fff;
-      border: 1px solid #fff;
+      font-size: 0.98rem;
+      background: rgba(40,40,40,0.7);
+      padding: 5px 14px;
+      border-radius: 6px;
+      z-index: 2;
+      pointer-events: none;
     }
     .content {
       position: relative;
@@ -205,15 +192,10 @@
   </style>
 </head>
 <body>
-  <!-- Signals SVG waves -->
-  <div class="signal-svg">
+  <!-- Sine wave SVG animated -->
+  <div class="sine-svg">
     <svg width="100vw" height="90" viewBox="0 0 1200 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100vw; height:90px;">
-      <!-- Sine wave (animated) -->
-      <path id="sine" stroke="#fff" stroke-width="2.5" fill="none"/>
-      <!-- Sawtooth wave -->
-      <polyline points="20,45 70,10 120,80 170,10 220,80 270,10 320,80 370,10 420,80 470,10 520,80 570,10 620,80" stroke="#fff" stroke-width="2.2" fill="none" opacity="0.28"/>
-      <!-- Square wave -->
-      <polyline points="650,45 650,10 700,10 700,80 750,80 750,10 800,10 800,80 850,80" stroke="#fff" stroke-width="2" fill="none" opacity="0.2"/>
+      <path id="sine" stroke="#fff" stroke-width="3" fill="none"/>
     </svg>
   </div>
   <header>
@@ -227,11 +209,8 @@
   </nav>
   <!-- 3D Section -->
   <section class="three-section">
-    <div class="controls">
-      <button class="control-btn" onclick="resizeThree('shrink')">Shrink 3D Area</button>
-      <button class="control-btn" onclick="resizeThree('expand')">Expand 3D Area</button>
-    </div>
     <div id="three-container">
+      <span class="zoom-indicator" id="zoom-indicator">Zoom: 70%</span>
       <canvas id="three-bg"></canvas>
     </div>
   </section>
@@ -272,9 +251,9 @@
     function animateSine() {
       const sine = document.getElementById("sine");
       let points = "";
-      for (let x = 0; x <= 600; x += 12) {
-        let y = 45 + Math.sin((x + (Date.now()/7) % 600)*0.024) * 30;
-        points += (x+20) + "," + Math.round(y) + " ";
+      for (let x = 0; x <= 1200; x += 14) {
+        let y = 45 + Math.sin((x/24 + (Date.now()/400))) * 32;
+        points += x + "," + Math.round(y) + " ";
       }
       let d = "M " + points.split(" ").join(" L ");
       sine.setAttribute("d", d);
@@ -284,19 +263,6 @@
 
     // ---- 3D Electronics Section ----
     let threeWidth = 740, threeHeight = 340;
-    function resizeThree(action) {
-      if (action === 'shrink') {
-        threeWidth = 420; threeHeight = 180;
-      } else {
-        threeWidth = 740; threeHeight = 340;
-      }
-      document.getElementById('three-container').style.maxWidth = threeWidth + "px";
-      document.getElementById('three-container').style.height = threeHeight + "px";
-      renderer.setSize(threeWidth, threeHeight);
-      camera.aspect = threeWidth/threeHeight;
-      camera.updateProjectionMatrix();
-    }
-    // Initial size
     document.getElementById('three-container').style.maxWidth = threeWidth + "px";
     document.getElementById('three-container').style.height = threeHeight + "px";
 
@@ -306,11 +272,12 @@
     renderer.setSize(threeWidth, threeHeight);
 
     const scene = new THREE.Scene();
+    let cameraZ = 70;
     const camera = new THREE.PerspectiveCamera(60, threeWidth/threeHeight, 0.1, 1000);
-    camera.position.z = 70;
+    camera.position.z = cameraZ;
 
     // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.96));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.97));
     const pointLight = new THREE.PointLight(0xffffff, 1.2, 300);
     pointLight.position.set(0, 80, 100);
     scene.add(pointLight);
@@ -323,7 +290,7 @@
         opacity: opacity,
         shininess: 120,
         emissive: 0xffffff,
-        emissiveIntensity: 0.3
+        emissiveIntensity: 0.2
       });
     }
     function makeBandMaterial(color, opacity) {
@@ -336,10 +303,18 @@
         emissiveIntensity: 0.1
       });
     }
-
+    function makeLinkMaterial() {
+      return new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.5,
+        shininess: 40,
+        emissive: 0xffffff,
+        emissiveIntensity: 0.08
+      });
+    }
     // Detailed resistor (with bands)
     function createResistor(x, y, z, bands=[0xD32F2F,0xFFD600,0x1976D2,0x222]) {
-      // Body
       const bodyGeom = new THREE.CylinderGeometry(2.4, 2.4, 14, 32);
       const bodyMat = makeWhiteMaterial(0.7);
       const body = new THREE.Mesh(bodyGeom, bodyMat);
@@ -355,7 +330,7 @@
       dome2.position.set(x, y+7, z);
       scene.add(dome2);
 
-      // Bands (varying opacity for realism)
+      // Bands
       for (let i = 0; i < bands.length; i++) {
         const bandGeom = new THREE.CylinderGeometry(2.5,2.5,1.3,32);
         const bandMat = makeBandMaterial(bands[i], 0.36 + 0.18 * Math.random());
@@ -376,7 +351,7 @@
       scene.add(body);
       return body;
     }
-
+    // Capacitor
     function createCapacitor(x, y, z) {
       const bodyGeom = new THREE.CylinderGeometry(3, 3, 12, 36);
       const bodyMat = makeWhiteMaterial(0.67);
@@ -403,7 +378,7 @@
       scene.add(body);
       return body;
     }
-
+    // Inductor
     function createInductor(x, y, z) {
       const torusGeom = new THREE.TorusGeometry(4, 1.1, 24, 100);
       const torusMat = makeWhiteMaterial(0.6);
@@ -422,7 +397,7 @@
       scene.add(torus);
       return torus;
     }
-
+    // Transistor
     function createTransistor(x, y, z) {
       const bodyGeom = new THREE.CylinderGeometry(2.6, 2.6, 7, 32);
       const bodyMat = makeWhiteMaterial(0.75);
@@ -444,18 +419,130 @@
       scene.add(body);
       return body;
     }
+    // Cell phone tower
+    function createTower(x, y, z) {
+      const towerGeom = new THREE.CylinderGeometry(1.5, 2, 24, 24);
+      const towerMat = makeWhiteMaterial(0.60);
+      const tower = new THREE.Mesh(towerGeom, towerMat);
+      tower.position.set(x, y, z);
+      // Antennas
+      for (let i=0; i<3; i++) {
+        const antGeom = new THREE.CylinderGeometry(0.22,0.22,7,10);
+        const antMat = makeWhiteMaterial(0.35);
+        const antenna = new THREE.Mesh(antGeom, antMat);
+        antenna.position.set(x + Math.cos(i*2*Math.PI/3)*2, y+13, z + Math.sin(i*2*Math.PI/3)*2);
+        scene.add(antenna);
+      }
+      scene.add(tower);
+      return tower;
+    }
+    // Satellite
+    function createSatellite(x, y, z) {
+      const satGeom = new THREE.SphereGeometry(3.2, 22, 22);
+      const satMat = makeWhiteMaterial(0.65);
+      const sat = new THREE.Mesh(satGeom, satMat);
+      sat.position.set(x, y, z);
+      // Solar panels
+      const panelGeom = new THREE.BoxGeometry(6,1,0.5);
+      const panelMat = makeWhiteMaterial(0.28);
+      const panel1 = new THREE.Mesh(panelGeom, panelMat);
+      panel1.position.set(x-5, y, z);
+      scene.add(panel1);
+      const panel2 = new THREE.Mesh(panelGeom, panelMat);
+      panel2.position.set(x+5, y, z);
+      scene.add(panel2);
+      scene.add(sat);
+      return sat;
+    }
+    // Base station
+    function createBaseStation(x, y, z) {
+      const baseGeom = new THREE.BoxGeometry(6,3,6);
+      const baseMat = makeWhiteMaterial(0.69);
+      const base = new THREE.Mesh(baseGeom, baseMat);
+      base.position.set(x, y, z);
+      // Antenna
+      const antGeom = new THREE.CylinderGeometry(0.33,0.33,5,10);
+      const antMat = makeWhiteMaterial(0.45);
+      const antenna = new THREE.Mesh(antGeom, antMat);
+      antenna.position.set(x, y+4, z);
+      scene.add(antenna);
+      scene.add(base);
+      return base;
+    }
+    // House/office/industry
+    function createBuilding(x, y, z, type="house") {
+      // House: small box, office: tall box, industry: big flat box
+      let geom, mat;
+      switch(type) {
+        case "house":
+          geom = new THREE.BoxGeometry(4,3,4); mat = makeWhiteMaterial(0.59); break;
+        case "office":
+          geom = new THREE.BoxGeometry(3,8,3); mat = makeWhiteMaterial(0.63); break;
+        case "industry":
+          geom = new THREE.BoxGeometry(7,2.5,8); mat = makeWhiteMaterial(0.56); break;
+      }
+      const b = new THREE.Mesh(geom, mat);
+      b.position.set(x, y, z);
+      scene.add(b);
+      return b;
+    }
+    // Vehicle
+    function createVehicle(x, y, z) {
+      const bodyGeom = new THREE.BoxGeometry(5,2.5,2.5);
+      const bodyMat = makeWhiteMaterial(0.60);
+      const body = new THREE.Mesh(bodyGeom, bodyMat);
+      body.position.set(x, y, z);
+      // Wheels
+      const wheelGeom = new THREE.CylinderGeometry(0.6,0.6,1,10);
+      const wheelMat = makeWhiteMaterial(0.38);
+      for(let i=-1;i<=1;i+=2) {
+        for(let j=-1;j<=1;j+=2) {
+          const wheel = new THREE.Mesh(wheelGeom, wheelMat);
+          wheel.position.set(x+i*2, y-1.5, z+j*1);
+          wheel.rotation.z = Math.PI/2;
+          scene.add(wheel);
+        }
+      }
+      scene.add(body);
+      return body;
+    }
+    // Linking strands
+    function createLink(x1,y1,z1,x2,y2,z2) {
+      const dist = Math.sqrt((x2-x1)**2+(y2-y1)**2+(z2-z1)**2);
+      const geom = new THREE.CylinderGeometry(0.18,0.18,dist,8);
+      const mat = makeLinkMaterial();
+      const link = new THREE.Mesh(geom, mat);
+      link.position.set((x1+x2)/2, (y1+y2)/2, (z1+z2)/2);
+      link.lookAt(x2,y2,z2);
+      scene.add(link);
+      return link;
+    }
 
     // Place components spaced out
-    const objects = [
-      createResistor(-28, 17, 0, [0xD32F2F,0xFFD600,0x1976D2,0x222]),
-      createResistor(28, -17, 0, [0x388E3C,0x1976D2,0xFBC02D,0xfff]),
-      createCapacitor(-14, -28, 10),
-      createInductor(0, 28, -6),
-      createTransistor(28, 28, 0),
-      createInductor(-28, -28, 12),
-      createCapacitor(0, 0, 0),
-      createTransistor(-28, 0, 28),
+    const components = [
+      createTower(-25,22,0),
+      createSatellite(36,24,0),
+      createBaseStation(0,-26,8),
+      createBuilding(-30,-20,0,"house"),
+      createBuilding(25,-23,0,"office"),
+      createBuilding(0,0,-28,"industry"),
+      createVehicle(22,17,-12),
+      createVehicle(-18,23,12),
+      createResistor(-40,0,18,[0xD32F2F,0xFFD600,0x1976D2,0x222]),
+      createCapacitor(12,-28,-9),
+      createInductor(-16,24,8),
+      createTransistor(37,-18,-6)
     ];
+
+    // Link some components visually (simulate network/data flow)
+    createLink(-25,22,0,36,24,0); // tower <-> satellite
+    createLink(-25,22,0,0,-26,8); // tower <-> base
+    createLink(0,-26,8,25,-23,0); // base <-> office
+    createLink(25,-23,0,0,0,-28); // office <-> industry
+    createLink(0,0,-28,-30,-20,0); // industry <-> house
+    createLink(-30,-20,0,22,17,-12); // house <-> vehicle
+    createLink(36,24,0,12,-28,-9); // satellite <-> capacitor
+    createLink(-18,23,12,-16,24,8); // vehicle <-> inductor
 
     // Drag to rotate scene
     let isDragging = false, prevX = 0, prevY = 0;
@@ -481,6 +568,33 @@
         scene.rotation.y += dx * 0.012;
         scene.rotation.x += dy * 0.012;
         prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+      }
+    });
+
+    // Zoom in/out with wheel or pinch
+    function setZoom(val) {
+      camera.position.z = val;
+      document.getElementById('zoom-indicator').innerText = `Zoom: ${Math.round((100*70/val))}%`;
+    }
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      cameraZ += e.deltaY * 0.09;
+      cameraZ = Math.max(30, Math.min(130, cameraZ));
+      setZoom(cameraZ);
+    }, {passive:false});
+    // For touch pinch (mobile)
+    let pinchStart = null;
+    canvas.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) {
+        pinchStart = Math.abs(e.touches[0].clientX-e.touches[1].clientX)+Math.abs(e.touches[0].clientY-e.touches[1].clientY);
+      }
+    });
+    canvas.addEventListener('touchmove', e => {
+      if (e.touches.length === 2 && pinchStart) {
+        let pinchNow = Math.abs(e.touches[0].clientX-e.touches[1].clientX)+Math.abs(e.touches[0].clientY-e.touches[1].clientY);
+        cameraZ += (pinchStart-pinchNow)*0.08;
+        cameraZ = Math.max(30, Math.min(130, cameraZ));
+        setZoom(cameraZ);
       }
     });
 
