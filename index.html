@@ -12,11 +12,9 @@
       background: #000;
       color: #fff;
       font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-      position: relative;
       min-height: 100vh;
       overflow-x: hidden;
     }
-    
     header {
       position: relative;
       background: transparent;
@@ -25,7 +23,6 @@
       padding: 64px 20px 40px 20px;
       z-index: 2;
     }
-
     .sine-svg {
       position: absolute;
       left: 0;
@@ -35,7 +32,6 @@
       pointer-events: none;
       z-index: 1;
     }
-
     header h1 {
       position: relative;
       font-size: 3rem;
@@ -45,7 +41,6 @@
       text-shadow: 0 0 32px #fff, 0 0 12px #fff;
       z-index: 2;
     }
-
     header p {
       font-size: 1.25rem;
       color: #fff;
@@ -53,177 +48,171 @@
       text-shadow: 0 0 18px #fff;
       margin-top: 8px;
       z-index: 2;
-      position: relative;
     }
-
     nav {
       background: transparent;
       padding: 13px 0;
       text-align: center;
-      position: relative;
-      z-index: 3;
+      z-index: 2;
     }
-
     nav a {
       color: #fff;
       margin: 0 18px;
       text-decoration: none;
       font-weight: bold;
       font-size: 1.18rem;
-      transition: all 0.2s;
+      transition: color 0.2s;
       text-shadow: 0 0 8px #fff;
       opacity: 0.95;
-      padding: 4px 12px;
-      border-radius: 4px;
     }
-
     nav a:hover {
       color: #000;
       background: #fff;
+      border-radius: 4px;
+      padding: 2px 8px;
       text-shadow: none;
     }
-
-    .three-viewport {
-      position: fixed;
-      top: 0;
-      left: 0;
+    .three-section {
       width: 100%;
-      height: 100vh;
+      max-width: 900px;
+      margin: 0 auto 32px auto;
+      margin-top: 0;
+      position: relative;
       z-index: 1;
-      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-
-    .three-container {
-      position: absolute;
-      top: 180px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 800px;
-      height: 400px;
+    #three-container {
+      width: 100%;
+      max-width: 740px;
+      height: 340px;
+      min-height: 200px;
       border-radius: 24px;
+      box-shadow: 0 0 44px #fff, 0 2px 18px #000;
+      background: rgba(17, 17, 17, 0.8);
       overflow: hidden;
-      pointer-events: auto;
-      box-shadow: 0 0 44px rgba(255,255,255,0.2);
-      background: rgba(0,0,0,0.7);
+      position: relative;
+      margin-bottom: 8px;
+      margin-top: 0;
     }
-
     .zoom-indicator {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(0,0,0,0.7);
+      top: 10px; right: 18px;
       color: #fff;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      pointer-events: none;
+      font-size: 0.98rem;
+      background: rgba(40,40,40,0.7);
+      padding: 5px 14px;
+      border-radius: 6px;
       z-index: 2;
+      pointer-events: none;
     }
-
     .content {
       position: relative;
-      z-index: 2;
-      padding: 620px 20px 40px;
+      z-index: 1;
       max-width: 800px;
       margin: 0 auto;
-      background: rgba(0,0,0,0.8);
+      padding: 20px 20px 20px 20px;
+      background: rgba(0, 0, 0, 0.9);
     }
-
+    h2 {
+      color: #fff;
+      margin-bottom: 32px;
+      text-align: left;
+      text-shadow: 0 0 16px #fff;
+    }
     .project-card {
       background: #fff;
       border-radius: 16px;
       margin-bottom: 40px;
       padding: 34px 28px;
       box-shadow: 0 0 32px #fff, 0 2px 10px #000;
-      transition: all 0.3s;
+      transition: transform 0.2s, box-shadow 0.2s;
       border: 2px solid #fff;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
-
     .project-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 48px #fff;
+      transform: scale(1.04);
+      box-shadow: 0 0 48px #fff, 0 4px 24px #000;
+      border-color: #fff;
+      background: #f9f9f9;
     }
-
     .project-title {
       font-size: 1.4rem;
       font-weight: 700;
       color: #000;
       margin-bottom: 8px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px #fff;
     }
-
-    h2 {
-      color: #fff;
-      margin-bottom: 32px;
-      text-shadow: 0 0 16px #fff;
-    }
-
     .skills-list {
       list-style: none;
       padding: 0;
+      margin: 0 0 10px 0;
       color: #fff;
       font-size: 1.08rem;
       opacity: 0.95;
     }
-
+    .skills-list li {
+      margin-bottom: 7px;
+    }
     .contact {
       margin-top: 40px;
       color: #fff;
       font-size: 1.13rem;
+      text-align: left;
+      opacity: 0.94;
     }
-
     .contact a {
       color: #fff;
-      text-decoration: none;
+      text-decoration: underline;
       margin: 0 14px;
       text-shadow: 0 0 8px #fff;
-      transition: all 0.2s;
-      padding: 4px 12px;
-      border-radius: 4px;
     }
-
     .contact a:hover {
       color: #000;
       background: #fff;
+      border-radius: 4px;
+      padding: 2px 8px;
       text-shadow: none;
     }
-
     footer {
+      background: transparent;
+      color: #fff;
       text-align: center;
       padding: 18px;
-      color: #fff;
+      margin-top: 55px;
+      font-size: 1rem;
+      text-shadow: 0 0 8px #fff;
       opacity: 0.85;
-      position: relative;
-      z-index: 2;
     }
   </style>
 </head>
 <body>
+  <!-- Sine wave SVG animated -->
   <div class="sine-svg">
-    <svg width="100vw" height="90" viewBox="0 0 1200 90" fill="none">
+    <svg width="100vw" height="90" viewBox="0 0 1200 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100vw; height:90px;">
       <path id="sine" stroke="#fff" stroke-width="3" fill="none"/>
     </svg>
   </div>
-
   <header>
     <h1>Mohamed Usman</h1>
     <p>Electronics & IoT Enthusiast | Embedded Systems Learner</p>
   </header>
-
   <nav>
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
   </nav>
-
-  <div class="three-viewport">
-    <div class="three-container">
-      <div class="zoom-indicator" id="zoom-indicator">Zoom: 100%</div>
+  <!-- 3D Section inline, not fixed -->
+  <section class="three-section">
+    <div id="three-container">
+      <span class="zoom-indicator" id="zoom-indicator">Zoom: 70%</span>
       <canvas id="three-bg"></canvas>
     </div>
-  </div>
-
+  </section>
   <div class="content">
     <section id="projects">
       <h2>Projects</h2>
@@ -237,7 +226,6 @@
         <div class="project-title">IoT Based Automatic Vehicle Accident and Rash Driving Alert System</div>
       </div>
     </section>
-
     <section id="skills">
       <h2>Skills</h2>
       <ul class="skills-list">
@@ -245,7 +233,6 @@
         <li><strong>Programming Languages:</strong> C/Arduino, Python/Micro Python</li>
       </ul>
     </section>
-
     <section id="contact" class="contact">
       <h2>Contact</h2>
       <p>📧 Email: <a href="mailto:mdusman102004@gmail.com">mdusman102004@gmail.com</a></p>
@@ -255,13 +242,11 @@
       </p>
     </section>
   </div>
-
   <footer>
     <p>© 2025 Mohamed Usman. All rights reserved.</p>
   </footer>
-
   <script>
-    // Sine wave animation
+    // ---- SVG Sine Wave Animation ----
     function animateSine() {
       const sine = document.getElementById("sine");
       let points = "";
@@ -275,44 +260,44 @@
     }
     animateSine();
 
+    // ---- 3D IoT/Infrastructure Section ----
+    let threeWidth = 740, threeHeight = 340;
+    document.getElementById('three-container').style.maxWidth = threeWidth + "px";
+    document.getElementById('three-container').style.height = threeHeight + "px";
+
     // Three.js setup
     const canvas = document.getElementById('three-bg');
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true
-    });
-
-    const container = document.querySelector('.three-container');
-    const rect = container.getBoundingClientRect();
-    renderer.setSize(rect.width, rect.height);
+    const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+    renderer.setSize(threeWidth, threeHeight);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, rect.width/rect.height, 0.1, 1000);
-    camera.position.z = 70;
+    let cameraZ = 70;
+    const camera = new THREE.PerspectiveCamera(60, threeWidth/threeHeight, 0.1, 1000);
+    camera.position.z = cameraZ;
 
     // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const pointLight = new THREE.PointLight(0xffffff, 1, 300);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.97));
+    const pointLight = new THREE.PointLight(0xffffff, 1.2, 300);
     pointLight.position.set(0, 80, 100);
     scene.add(pointLight);
 
+    // Helper material
     function makeWhiteMaterial(opacity = 0.7) {
       return new THREE.MeshPhongMaterial({
         color: 0xffffff,
         transparent: true,
         opacity: opacity,
-        shininess: 100,
+        shininess: 120,
         emissive: 0xffffff,
-        emissiveIntensity: 0.1
+        emissiveIntensity: 0.2
       });
     }
 
-    // Create tower with detailed antennas
+    // Cell phone tower
     function createTower(x, y, z, height = 24) {
       const group = new THREE.Group();
-      
-      // Base structure
+
+      // Tower structure
       const baseGeom = new THREE.CylinderGeometry(2, 3, height, 6);
       const baseMat = makeWhiteMaterial(0.7);
       const base = new THREE.Mesh(baseGeom, baseMat);
@@ -332,19 +317,16 @@
         const antGeom = new THREE.BoxGeometry(0.5, 4, 1);
         const antMat = makeWhiteMaterial(0.9);
         const antenna = new THREE.Mesh(antGeom, antMat);
-        
         antenna.position.set(
           Math.cos(angle) * 3,
           height/3,
           Math.sin(angle) * 3
         );
-        
         antenna.lookAt(new THREE.Vector3(
           Math.cos(angle) * 10,
           height/3,
           Math.sin(angle) * 10
         ));
-        
         group.add(antenna);
       }
 
@@ -353,10 +335,10 @@
       return group;
     }
 
-    // Create satellite with solar panels
+    // Satellite
     function createSatellite(x, y, z) {
       const group = new THREE.Group();
-      
+
       // Main body
       const bodyGeom = new THREE.SphereGeometry(3, 16, 16);
       const bodyMat = makeWhiteMaterial(0.8);
@@ -366,7 +348,7 @@
       // Solar panels
       const panelGeom = new THREE.BoxGeometry(12, 4, 0.2);
       const panelMat = makeWhiteMaterial(0.6);
-      
+
       const leftPanel = new THREE.Mesh(panelGeom, panelMat);
       leftPanel.position.x = -7;
       group.add(leftPanel);
@@ -375,7 +357,7 @@
       rightPanel.position.x = 7;
       group.add(rightPanel);
 
-      // Communication dish
+      // Dish
       const dishGeom = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI);
       const dish = new THREE.Mesh(dishGeom, bodyMat);
       dish.rotation.x = Math.PI/2;
@@ -387,10 +369,10 @@
       return group;
     }
 
-    // Create buildings with antennas
+    // Building (office, house, industry)
     function createBuilding(x, y, z, type = "office") {
       const group = new THREE.Group();
-      
+
       let buildingGeom, height;
       switch(type) {
         case "office":
@@ -406,12 +388,12 @@
           height = 12;
           break;
       }
-      
+
       const buildingMat = makeWhiteMaterial(0.7);
       const building = new THREE.Mesh(buildingGeom, buildingMat);
       group.add(building);
 
-      // Add rooftop equipment for non-residential buildings
+      // Add antenna or dish (not for house)
       if (type !== "house") {
         const antennaGeom = new THREE.CylinderGeometry(0.3, 0.3, 4, 8);
         const antenna = new THREE.Mesh(antennaGeom, buildingMat);
@@ -430,446 +412,120 @@
       return group;
     }
 
-    // Create data stream effect
+    // Data stream (connection)
     function createDataStream(start, end) {
       const points = [];
       points.push(new THREE.Vector3(start.x, start.y, start.z));
-      
-      <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Mohamed Usman Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #fff;
-      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-      position: relative;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    
-    header {
-      position: relative;
-      background: transparent;
-      color: #fff;
-      text-align: center;
-      padding: 64px 20px 40px 20px;
-      z-index: 2;
-    }
-
-    .sine-svg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 90px;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    header h1 {
-      position: relative;
-      font-size: 3rem;
-      letter-spacing: 2px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-shadow: 0 0 32px #fff, 0 0 12px #fff;
-      z-index: 2;
-    }
-
-    header p {
-      font-size: 1.25rem;
-      color: #fff;
-      opacity: 0.85;
-      text-shadow: 0 0 18px #fff;
-      margin-top: 8px;
-      z-index: 2;
-      position: relative;
-    }
-
-    nav {
-      background: transparent;
-      padding: 13px 0;
-      text-align: center;
-      position: relative;
-      z-index: 3;
-    }
-
-    nav a {
-      color: #fff;
-      margin: 0 18px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.18rem;
-      transition: all 0.2s;
-      text-shadow: 0 0 8px #fff;
-      opacity: 0.95;
-      padding: 4px 12px;
-      border-radius: 4px;
-    }
-
-    nav a:hover {
-      color: #000;
-      background: #fff;
-      text-shadow: none;
-    }
-
-    .three-viewport {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .three-container {
-      position: absolute;
-      top: 180px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 800px;
-      height: 400px;
-      border-radius: 24px;
-      overflow: hidden;
-      pointer-events: auto;
-      box-shadow: 0 0 44px rgba(255,255,255,0.2);
-      background: rgba(0,0,0,0.7);
-    }
-
-    .zoom-indicator {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .content {
-      position: relative;
-      z-index: 2;
-      padding: 620px 20px 40px;
-      max-width: 800px;
-      margin: 0 auto;
-      background: rgba(0,0,0,0.8);
-    }
-
-    .project-card {
-      background: #fff;
-      border-radius: 16px;
-      margin-bottom: 40px;
-      padding: 34px 28px;
-      box-shadow: 0 0 32px #fff, 0 2px 10px #000;
-      transition: all 0.3s;
-      border: 2px solid #fff;
-      cursor: pointer;
-    }
-
-    .project-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 48px #fff;
-    }
-
-    .project-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 8px;
-    }
-
-    h2 {
-      color: #fff;
-      margin-bottom: 32px;
-      text-shadow: 0 0 16px #fff;
-    }
-
-    .skills-list {
-      list-style: none;
-      padding: 0;
-      color: #fff;
-      font-size: 1.08rem;
-      opacity: 0.95;
-    }
-
-    .contact {
-      margin-top: 40px;
-      color: #fff;
-      font-size: 1.13rem;
-    }
-
-    .contact a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 14px;
-      text-shadow: 0 0 8px #fff;
-      transition: all 0.2s;
-      padding: 4px 12px;
-      border-radius: 4px;
-    }
-
-    .contact a:hover {
-      color: #000;
-      background: #fff;
-      text-shadow: none;
-    }
-
-    footer {
-      text-align: center;
-      padding: 18px;
-      color: #fff;
-      opacity: 0.85;
-      position: relative;
-      z-index: 2;
-    }
-  </style>
-</head>
-<body>
-  <div class="sine-svg">
-    <svg width="100vw" height="90" viewBox="0 0 1200 90" fill="none">
-      <path id="sine" stroke="#fff" stroke-width="3" fill="none"/>
-    </svg>
-  </div>
-
-  <header>
-    <h1>Mohamed Usman</h1>
-    <p>Electronics & IoT Enthusiast | Embedded Systems Learner</p>
-  </header>
-
-  <nav>
-    <a href="#projects">Projects</a>
-    <a href="#skills">Skills</a>
-    <a href="#contact">Contact</a>
-  </nav>
-
-  <div class="three-viewport">
-    <div class="three-container">
-      <div class="zoom-indicator" id="zoom-indicator">Zoom: 100%</div>
-      <canvas id="three-bg"></canvas>
-    </div>
-  </div>
-
-  <div class="content">
-    <section id="projects">
-      <h2>Projects</h2>
-      <div class="project-card" onclick="location.href='facial-recognition.html'">
-        <div class="project-title">Facial Recognition Attendance System with Liveness Detection</div>
-      </div>
-      <div class="project-card" onclick="location.href='dtmf-telerover.html'">
-        <div class="project-title">DTMF Based Mobile Controlled Telerover</div>
-      </div>
-      <div class="project-card" onclick="location.href='iot-vehicle-alert.html'">
-        <div class="project-title">IoT Based Automatic Vehicle Accident and Rash Driving Alert System</div>
-      </div>
-    </section>
-
-    <section id="skills">
-      <h2>Skills</h2>
-      <ul class="skills-list">
-        <li><strong>Technical Skills:</strong> Embedded System Development, IoT System Design and Implementation</li>
-        <li><strong>Programming Languages:</strong> C/Arduino, Python/Micro Python</li>
-      </ul>
-    </section>
-
-    <section id="contact" class="contact">
-      <h2>Contact</h2>
-      <p>📧 Email: <a href="mailto:mdusman102004@gmail.com">mdusman102004@gmail.com</a></p>
-      <p>
-        <a href="https://github.com/m-usman17" target="_blank">GitHub</a>
-        <a href="https://linkedin.com/in/mohamed-usman-a" target="_blank">LinkedIn</a>
-      </p>
-    </section>
-  </div>
-
-  <footer>
-    <p>© 2025 Mohamed Usman. All rights reserved.</p>
-  </footer>
-
-  <script>
-    // Sine wave animation
-    function animateSine() {
-      const sine = document.getElementById("sine");
-      let points = "";
-      for (let x = 0; x <= 1200; x += 14) {
-        let y = 45 + Math.sin((x/24 + (Date.now()/400))) * 32;
-        points += x + "," + Math.round(y) + " ";
-      }
-      let d = "M " + points.split(" ").join(" L ");
-      sine.setAttribute("d", d);
-      requestAnimationFrame(animateSine);
-    }
-    animateSine();
-
-    // Three.js setup
-    const canvas = document.getElementById('three-bg');
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true
-    });
-
-    const container = document.querySelector('.three-container');
-    const rect = container.getBoundingClientRect();
-    renderer.setSize(rect.width, rect.height);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, rect.width/rect.height, 0.1, 1000);
-    camera.position.z = 70;
-
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const pointLight = new THREE.PointLight(0xffffff, 1, 300);
-    pointLight.position.set(0, 80, 100);
-    scene.add(pointLight);
-
-    function makeWhiteMaterial(opacity = 0.7) {
-      return new THREE.MeshPhongMaterial({
+      const mid = new THREE.Vector3(
+        (start.x + end.x)/2,
+        Math.max(start.y, end.y) + 10,
+        (start.z + end.z)/2
+      );
+      points.push(mid);
+      points.push(new THREE.Vector3(end.x, end.y, end.z));
+      const curve = new THREE.CatmullRomCurve3(points);
+      const geometry = new THREE.TubeGeometry(curve, 20, 0.2, 8, false);
+      const material = new THREE.MeshPhongMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: opacity,
-        shininess: 100,
+        opacity: 0.4,
         emissive: 0xffffff,
-        emissiveIntensity: 0.1
+        emissiveIntensity: 0.2
+      });
+      const tube = new THREE.Mesh(geometry, material);
+      scene.add(tube);
+      return tube;
+    }
+
+    // Place components
+    const components = [
+      createTower(-30, 0, -20),
+      createTower(30, 0, -20),
+      createTower(0, 0, 30),
+      createSatellite(-20, 40, -10),
+      createSatellite(20, 45, 10),
+      createBuilding(-25, 0, 10, "office"),
+      createBuilding(25, 0, 10, "office"),
+      createBuilding(0, 0, -30, "industry"),
+      createBuilding(-15, 0, -15, "house"),
+      createBuilding(15, 0, -15, "house")
+    ];
+
+    // Create data streams (connections)
+    const dataStreams = [];
+    const keyPairs = [
+      [0,3],[0,6],[0,8],[1,4],[1,7],[1,9],[2,3],[2,4],[2,7],[2,8],[3,6],[4,7],[5,3],[6,4],[7,4],[7,9],[8,6]
+    ];
+    keyPairs.forEach(([a,b]) => {
+      dataStreams.push(createDataStream(
+        components[a].position,
+        components[b].position
+      ));
+    });
+
+    // Animate data streams
+    const streamMaterials = dataStreams.map(stream => stream.material);
+    function animateStreams() {
+      streamMaterials.forEach(material => {
+        material.opacity = 0.3 + Math.sin(Date.now() / 1000) * 0.1;
       });
     }
 
-    // Create tower with detailed antennas
-    function createTower(x, y, z, height = 24) {
-      const group = new THREE.Group();
-      
-      // Base structure
-      const baseGeom = new THREE.CylinderGeometry(2, 3, height, 6);
-      const baseMat = makeWhiteMaterial(0.7);
-      const base = new THREE.Mesh(baseGeom, baseMat);
-      group.add(base);
-
-      // Platforms
-      for(let i = 0; i < 3; i++) {
-        const platformGeom = new THREE.CylinderGeometry(4, 4, 1, 6);
-        const platform = new THREE.Mesh(platformGeom, baseMat);
-        platform.position.y = height/4 * (i-1);
-        group.add(platform);
+    // Drag to rotate scene
+    let isDragging = false, prevX = 0, prevY = 0;
+    canvas.addEventListener('mousedown', e => {isDragging=true; prevX=e.offsetX; prevY=e.offsetY;});
+    canvas.addEventListener('mouseup', e => {isDragging=false;});
+    canvas.addEventListener('mouseleave', e => {isDragging=false;});
+    canvas.addEventListener('mousemove', e => {
+      if (isDragging) {
+        const dx = e.offsetX - prevX, dy = e.offsetY - prevY;
+        scene.rotation.y += dx * 0.012;
+        scene.rotation.x += dy * 0.012;
+        prevX = e.offsetX; prevY = e.offsetY;
       }
+    });
 
-      // Antennas
-      for(let i = 0; i < 6; i++) {
-        const angle = (i * Math.PI) / 3;
-        const antGeom = new THREE.BoxGeometry(0.5, 4, 1);
-        const antMat = makeWhiteMaterial(0.9);
-        const antenna = new THREE.Mesh(antGeom, antMat);
-        
-        antenna.position.set(
-          Math.cos(angle) * 3,
-          height/3,
-          Math.sin(angle) * 3
-        );
-        
-        antenna.lookAt(new THREE.Vector3(
-          Math.cos(angle) * 10,
-          height/3,
-          Math.sin(angle) * 10
-        ));
-        
-        group.add(antenna);
-      }
-
-      group.position.set(x, y, z);
-      scene.add(group);
-      return group;
+    // Zoom in/out with wheel or pinch
+    function setZoom(val) {
+      camera.position.z = val;
+      document.getElementById('zoom-indicator').innerText = `Zoom: ${Math.round((100*70/val))}%`;
     }
-
-    // Create satellite with solar panels
-    function createSatellite(x, y, z) {
-      const group = new THREE.Group();
-      
-      // Main body
-      const bodyGeom = new THREE.SphereGeometry(3, 16, 16);
-      const bodyMat = makeWhiteMaterial(0.8);
-      const body = new THREE.Mesh(bodyGeom, bodyMat);
-      group.add(body);
-
-      // Solar panels
-      const panelGeom = new THREE.BoxGeometry(12, 4, 0.2);
-      const panelMat = makeWhiteMaterial(0.6);
-      
-      const leftPanel = new THREE.Mesh(panelGeom, panelMat);
-      leftPanel.position.x = -7;
-      group.add(leftPanel);
-
-      const rightPanel = new THREE.Mesh(panelGeom, panelMat);
-      rightPanel.position.x = 7;
-      group.add(rightPanel);
-
-      // Communication dish
-      const dishGeom = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI);
-      const dish = new THREE.Mesh(dishGeom, bodyMat);
-      dish.rotation.x = Math.PI/2;
-      dish.position.y = -2;
-      group.add(dish);
-
-      group.position.set(x, y, z);
-      scene.add(group);
-      return group;
-    }
-
-    // Create buildings with antennas
-    function createBuilding(x, y, z, type = "office") {
-      const group = new THREE.Group();
-      
-      let buildingGeom, height;
-      switch(type) {
-        case "office":
-          buildingGeom = new THREE.BoxGeometry(8, 20, 8);
-          height = 20;
-          break;
-        case "house":
-          buildingGeom = new THREE.BoxGeometry(6, 8, 6);
-          height = 8;
-          break;
-        case "industry":
-          buildingGeom = new THREE.BoxGeometry(16, 12, 12);
-          height = 12;
-          break;
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      cameraZ += e.deltaY * 0.09;
+      cameraZ = Math.max(30, Math.min(130, cameraZ));
+      setZoom(cameraZ);
+    }, {passive:false});
+    // For touch pinch (mobile)
+    let pinchStart = null;
+    canvas.addEventListener('touchstart', e => {
+      if (e.touches.length === 2) {
+        pinchStart = Math.abs(e.touches[0].clientX-e.touches[1].clientX)+Math.abs(e.touches[0].clientY-e.touches[1].clientY);
       }
-      
-      const buildingMat = makeWhiteMaterial(0.7);
-      const building = new THREE.Mesh(buildingGeom, buildingMat);
-      group.add(building);
-
-      // Add rooftop equipment for non-residential buildings
-      if (type !== "house") {
-        const antennaGeom = new THREE.CylinderGeometry(0.3, 0.3, 4, 8);
-        const antenna = new THREE.Mesh(antennaGeom, buildingMat);
-        antenna.position.y = height/2 + 2;
-        group.add(antenna);
-
-        const dishGeom = new THREE.SphereGeometry(1, 16, 16, 0, Math.PI);
-        const dish = new THREE.Mesh(dishGeom, buildingMat);
-        dish.rotation.x = Math.PI/2;
-        dish.position.set(2, height/2, 0);
-        group.add(dish);
+    });
+    canvas.addEventListener('touchmove', e => {
+      if (e.touches.length === 2 && pinchStart) {
+        let pinchNow = Math.abs(e.touches[0].clientX-e.touches[1].clientX)+Math.abs(e.touches[0].clientY-e.touches[1].clientY);
+        cameraZ += (pinchStart-pinchNow)*0.08;
+        cameraZ = Math.max(30, Math.min(130, cameraZ));
+        setZoom(cameraZ);
       }
+    });
 
-      group.position.set(x, y, z);
-      scene.add(group);
-      return group;
+    // Animate
+    function animate() {
+      animateStreams();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
     }
+    animate();
 
-    // Create data stream effect
-    function createDataStream(start, end) {
-      const points = [];
-      points.push(new THREE.Vector3(start.x, start.y, start.z));
-      
-      
+    // Responsive resize for 3D area
+    window.addEventListener('resize', () => {
+      renderer.setSize(threeWidth, threeHeight);
+      camera.aspect = threeWidth/threeHeight;
+      camera.updateProjectionMatrix();
+    });
+  </script>
+</body>
+</html>
