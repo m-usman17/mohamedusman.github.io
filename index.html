@@ -82,6 +82,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 360px; /* leave some space for 3D */
     }
     #three-container {
       width: 100%;
@@ -294,43 +295,70 @@
     }
 
     // Cell phone tower
-    function createTower(x, y, z, height = 24) {
+    function createTower(x, y, z, height = 14) {
       const group = new THREE.Group();
 
       // Tower structure
-      const baseGeom = new THREE.CylinderGeometry(2, 3, height, 6);
+      const baseGeom = new THREE.CylinderGeometry(0.7, 1.2, height, 12);
       const baseMat = makeWhiteMaterial(0.7);
       const base = new THREE.Mesh(baseGeom, baseMat);
       group.add(base);
 
       // Platforms
-      for(let i = 0; i < 3; i++) {
-        const platformGeom = new THREE.CylinderGeometry(4, 4, 1, 6);
+      for(let i = 0; i < 2; i++) {
+        const platformGeom = new THREE.CylinderGeometry(4.6, 4.6, 0.6, 24);
         const platform = new THREE.Mesh(platformGeom, baseMat);
-        platform.position.y = height/4 * (i-1);
+        platform.position.y = i === 0 ? 3.6 : -1.8;
         group.add(platform);
+
+        // rim
+        const rimGeom = new THREE.TorusGeometry(4.1, 0.12, 8, 96);
+        const rim = new THREE.Mesh(rimGeom, baseMat);
+        rim.rotation.x = Math.PI/2;
+        rim.position.y = platform.position.y + 0.35;
+        group.add(rim);
       }
 
       // Antennas
-      for(let i = 0; i < 6; i++) {
-        const angle = (i * Math.PI) / 3;
-        const antGeom = new THREE.BoxGeometry(0.5, 4, 1);
+      for(let i = 0; i < 4; i++) {
+        const angle = (i / 4) * Math.PI * 2;
+        const r = 1.2 + 0.6;
+        const antGeom = new THREE.BoxGeometry(0.24, 3.6, 0.24);
         const antMat = makeWhiteMaterial(0.9);
         const antenna = new THREE.Mesh(antGeom, antMat);
         antenna.position.set(
-          Math.cos(angle) * 3,
-          height/3,
-          Math.sin(angle) * 3
+          Math.cos(angle) * r,
+          height/2 - 3.6/2 - 0.8,
+          Math.sin(angle) * r
         );
-        antenna.lookAt(new THREE.Vector3(
-          Math.cos(angle) * 10,
-          height/3,
-          Math.sin(angle) * 10
-        ));
         group.add(antenna);
+
+        // pad
+        const padGeom = new THREE.BoxGeometry(0.6, 0.12, 1.0);
+        const pad = new THREE.Mesh(padGeom, baseMat);
+        pad.position.set(
+          Math.cos(angle) * (r+0.1),
+          height/2 - 0.2,
+          Math.sin(angle) * (r+0.1)
+        );
+        pad.rotation.y = angle;
+        group.add(pad);
       }
 
-      group.position.set(x, y, z);
+      // Base
+      const baseConeGeom = new THREE.CylinderGeometry(2.2, 2.31, 1.6, 12);
+      const baseCone = new THREE.Mesh(baseConeGeom, baseMat);
+      baseCone.position.y = -height/2 - 0.8;
+      group.add(baseCone);
+
+      // Cap
+      const capGeom = new THREE.SphereGeometry(0.42, 12, 8);
+      const cap = new THREE.Mesh(capGeom, baseMat);
+      cap.position.y = height/2 + 0.4;
+      group.add(cap);
+
+      group.scale.set(1.1,1.0,1.1);
+      group.position.set(x, y + height/2, z);
       scene.add(group);
       return group;
     }
@@ -339,73 +367,146 @@
     function createSatellite(x, y, z) {
       const group = new THREE.Group();
 
-      // Main body
-      const bodyGeom = new THREE.SphereGeometry(3, 16, 16);
-      const bodyMat = makeWhiteMaterial(0.8);
-      const body = new THREE.Mesh(bodyGeom, bodyMat);
-      group.add(body);
-
-      // Solar panels
-      const panelGeom = new THREE.BoxGeometry(12, 4, 0.2);
-      const panelMat = makeWhiteMaterial(0.6);
-
-      const leftPanel = new THREE.Mesh(panelGeom, panelMat);
-      leftPanel.position.x = -7;
-      group.add(leftPanel);
-
-      const rightPanel = new THREE.Mesh(panelGeom, panelMat);
-      rightPanel.position.x = 7;
-      group.add(rightPanel);
+      // Main bus
+      const busGeom = new THREE.BoxGeometry(2.2, 1.2, 1.6);
+      const busMat = makeWhiteMaterial(0.8);
+      const bus = new THREE.Mesh(busGeom, busMat);
+      group.add(bus);
 
       // Dish
-      const dishGeom = new THREE.SphereGeometry(2, 16, 16, 0, Math.PI);
-      const dish = new THREE.Mesh(dishGeom, bodyMat);
-      dish.rotation.x = Math.PI/2;
-      dish.position.y = -2;
+      const dishGeom = new THREE.ConeGeometry(0.9, 0.6, 32);
+      const dish = new THREE.Mesh(dishGeom, busMat);
+      dish.rotation.x = Math.PI;
+      dish.position.set(1.7, 0.0, 0.0);
       group.add(dish);
+
+      // Feed arm
+      const armGeom = new THREE.BoxGeometry(0.15, 0.15, 0.9);
+      const armMat = makeWhiteMaterial(0.5);
+      const arm = new THREE.Mesh(armGeom, armMat);
+      arm.position.set(1.2, 0.0, 0.0);
+      arm.rotation.z = Math.PI/8;
+      group.add(arm);
+
+      // Solar panels
+      const panelGeom = new THREE.BoxGeometry(3.2, 0.08, 1.0);
+      const panelMat = makeWhiteMaterial(0.6);
+      const left = new THREE.Mesh(panelGeom, panelMat);
+      left.position.set(-2.1, 0, -1.0);
+      left.rotation.y = Math.PI/12;
+      const right = left.clone();
+      right.position.set(-2.1, 0, 1.0);
+      group.add(left, right);
+
+      // Thruster
+      const thrGeom = new THREE.CylinderGeometry(0.12,0.14,0.4,12);
+      const thrMat = makeWhiteMaterial(0.4);
+      const thr = new THREE.Mesh(thrGeom, thrMat);
+      thr.rotation.z = Math.PI/2;
+      thr.position.set(-1.1, -0.4, 0);
+      group.add(thr);
 
       group.position.set(x, y, z);
       scene.add(group);
       return group;
     }
 
-    // Building (office, house, industry)
-    function createBuilding(x, y, z, type = "office") {
+    // Industry building
+    function createIndustry(x, y, z) {
       const group = new THREE.Group();
 
-      let buildingGeom, height;
-      switch(type) {
-        case "office":
-          buildingGeom = new THREE.BoxGeometry(8, 20, 8);
-          height = 20;
-          break;
-        case "house":
-          buildingGeom = new THREE.BoxGeometry(6, 8, 6);
-          height = 8;
-          break;
-        case "industry":
-          buildingGeom = new THREE.BoxGeometry(16, 12, 12);
-          height = 12;
-          break;
+      // Main warehouse block
+      const mainGeom = new THREE.BoxGeometry(8, 3.8, 6);
+      const mainMat = makeWhiteMaterial(0.7);
+      const main = new THREE.Mesh(mainGeom, mainMat);
+      main.position.y = 1.9;
+      group.add(main);
+
+      // Annex
+      const annexGeom = new THREE.BoxGeometry(4.2, 2.6, 3.6);
+      const annex = new THREE.Mesh(annexGeom, mainMat);
+      annex.position.set(-5.2, 1.3, 0);
+      group.add(annex);
+
+      // Roof box
+      const roofGeom = new THREE.BoxGeometry(3.2, 1.0, 2.6);
+      const roof = new THREE.Mesh(roofGeom, mainMat);
+      roof.position.set(1.8, 3.0, -1.2);
+      group.add(roof);
+
+      // Smokestack
+      const stackGeom = new THREE.CylinderGeometry(0.5, 0.6, 6, 12);
+      const stack = new THREE.Mesh(stackGeom, mainMat);
+      stack.position.set(3.6, 5.0, 2.4);
+      group.add(stack);
+
+      // Pipes
+      for(let i=0;i<4;i++){
+        const pipeGeom = new THREE.CylinderGeometry(0.08,0.08,6.4,8);
+        const pipe = new THREE.Mesh(pipeGeom, mainMat);
+        pipe.rotation.z = Math.PI/2;
+        pipe.position.set(-0.6 + i*1.6, 3.3, 2.1);
+        group.add(pipe);
       }
 
-      const buildingMat = makeWhiteMaterial(0.7);
-      const building = new THREE.Mesh(buildingGeom, buildingMat);
-      group.add(building);
+      // door
+      const doorGeom = new THREE.BoxGeometry(2.0, 2.6, 0.08);
+      const doorMat = makeWhiteMaterial(0.45);
+      const door = new THREE.Mesh(doorGeom, doorMat);
+      door.position.set(3.6, 1.3, -2.9);
+      group.add(door);
 
-      // Add antenna or dish (not for house)
-      if (type !== "house") {
-        const antennaGeom = new THREE.CylinderGeometry(0.3, 0.3, 4, 8);
-        const antenna = new THREE.Mesh(antennaGeom, buildingMat);
-        antenna.position.y = height/2 + 2;
-        group.add(antenna);
+      // vent
+      const ventGeom = new THREE.BoxGeometry(0.6, 0.3, 0.2);
+      const vent = new THREE.Mesh(ventGeom, mainMat);
+      vent.position.set(-4.4, 2.7, -1.2);
+      group.add(vent);
 
-        const dishGeom = new THREE.SphereGeometry(1, 16, 16, 0, Math.PI);
-        const dish = new THREE.Mesh(dishGeom, buildingMat);
-        dish.rotation.x = Math.PI/2;
-        dish.position.set(2, height/2, 0);
-        group.add(dish);
-      }
+      group.position.set(x, y, z);
+      scene.add(group);
+      return group;
+    }
+
+    // House
+    function createHouse(x, y, z) {
+      const group = new THREE.Group();
+
+      const wallMat = makeWhiteMaterial(0.8);
+      const roofMat = makeWhiteMaterial(0.5);
+
+      // Body
+      const bodyGeom = new THREE.BoxGeometry(3.6, 2.4, 3.0);
+      const body = new THREE.Mesh(bodyGeom, wallMat);
+      body.position.y = 1.2;
+      group.add(body);
+
+      // Roof (gabled)
+      const roofGeom = new THREE.ConeGeometry(2.2, 1.2, 4);
+      const roof = new THREE.Mesh(roofGeom, roofMat);
+      roof.rotation.y = Math.PI/4;
+      roof.position.y = 2.6;
+      group.add(roof);
+
+      // Door
+      const doorGeom = new THREE.BoxGeometry(0.6, 1.2, 0.08);
+      const doorMat = makeWhiteMaterial(0.4);
+      const door = new THREE.Mesh(doorGeom, doorMat);
+      door.position.set(0, 0.6, 1.51);
+      group.add(door);
+
+      // Windows
+      const winGeom = new THREE.BoxGeometry(0.6,0.6,0.08);
+      const winMat = makeWhiteMaterial(0.3);
+      const w1 = new THREE.Mesh(winGeom, winMat);
+      w1.position.set(-1.0,1.1,1.51);
+      const w2 = w1.clone(); w2.position.set(1.0,1.1,1.51);
+      group.add(w1,w2);
+
+      // Chimney
+      const chimGeom = new THREE.BoxGeometry(0.25,0.7,0.25);
+      const chim = new THREE.Mesh(chimGeom, roofMat);
+      chim.position.set(0.9,3.1,-0.4);
+      group.add(chim);
 
       group.position.set(x, y, z);
       scene.add(group);
@@ -437,24 +538,26 @@
       return tube;
     }
 
-    // Place components
+    // Place components (short/fat towers, satellites, industry, house)
     const components = [
       createTower(-30, 0, -20),
       createTower(30, 0, -20),
       createTower(0, 0, 30),
       createSatellite(-20, 40, -10),
       createSatellite(20, 45, 10),
-      createBuilding(-25, 0, 10, "office"),
-      createBuilding(25, 0, 10, "office"),
-      createBuilding(0, 0, -30, "industry"),
-      createBuilding(-15, 0, -15, "house"),
-      createBuilding(15, 0, -15, "house")
+      createIndustry(0, 0, -30),
+      createHouse(-15, 0, -15),
+      createHouse(15, 0, -15)
     ];
+
+    // Office buildings (optional, if you want to add back)
+    // components.push(createBuilding(-25, 0, 10, "office"));
+    // components.push(createBuilding(25, 0, 10, "office"));
 
     // Create data streams (connections)
     const dataStreams = [];
     const keyPairs = [
-      [0,3],[0,6],[0,8],[1,4],[1,7],[1,9],[2,3],[2,4],[2,7],[2,8],[3,6],[4,7],[5,3],[6,4],[7,4],[7,9],[8,6]
+      [0,3],[0,6],[1,4],[1,7],[2,3],[2,4],[2,6],[2,7],[3,6],[4,7],[5,6],[5,7]
     ];
     keyPairs.forEach(([a,b]) => {
       dataStreams.push(createDataStream(
